@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dataTemplate name="DATA">
+	<parameters>
+		<parameter name="p_idAccount" dataType="character"/>
+		<parameter name="p_dtBeg" dataType="character"/>
+		<parameter name="p_dtEnd" dataType="character"/>
+		<parameter name="p_capt" dataType="character"/>
+	</parameters>
+	<dataQuery>
+		<sqlStatement name="qMeters">
+			<![CDATA[
+				set dateformat dmy
+				go
+				select dateadd(minute, datepart(TZoffset, sysdatetimeoffset()), DTLog) as DTLog, CaptAction, CaptLog 
+				from fGetFromLogProcess(
+					(select top 1 idObject1 from LinkAccount where idAccount = :p_idAccount order by priority), 
+					0, 
+					(select top 1 idObject2 from LinkAccount where idAccount = :p_idAccount order by priority), 
+					:p_dtBeg, dateadd(dd,1,:p_dtEnd))
+				order by DTLog desc
+			]]>
+		</sqlStatement>
+	</dataQuery>
+	<dataStructure>
+		<group name="ROW" source="qMeters">
+			<element name="DTLog" value="DTLog"/>
+			<element name="CaptAction" value="CaptAction"/>
+			<element name="CaptLog" value="CaptLog"/>
+		</group>
+	</dataStructure>
+</dataTemplate>

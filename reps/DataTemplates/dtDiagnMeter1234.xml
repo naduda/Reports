@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dataTemplate name="DATA">
+	<parameters>
+		<parameter name="p_idNode" dataType="character"/>
+		<parameter name="p_idMeter" dataType="character"/>
+		<parameter name="p_dtBeg" dataType="character"/>
+		<parameter name="p_dtEnd" dataType="character"/>
+		<parameter name="p_typeEvent" dataType="character"/>
+		<parameter name="p_capt" dataType="character"/>
+	</parameters>
+	<dataQuery>
+		<sqlStatement name="qMeters">
+			<![CDATA[
+				set dateformat dmy
+				go
+				select dateadd(minute, datepart(TZoffset, sysdatetimeoffset()), DTEvent) as DTEvent, CaptEvent, ValEvent
+				from fGetLogEvent(:p_idNode,:p_idMeter, :p_typeEvent, :p_dtBeg, :p_dtEnd)
+			]]>
+		</sqlStatement>
+	</dataQuery>
+	<dataStructure>
+		<group name="ROW" source="qMeters">
+			<element name="DTEvent" value="DTEvent"/>
+			<element name="CaptEvent" value="CaptEvent"/>
+			<element name="ValEvent" value="ValEvent"/>
+		</group>
+	</dataStructure>
+</dataTemplate>

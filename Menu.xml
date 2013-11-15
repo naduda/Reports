@@ -1,0 +1,38 @@
+<menubar uniqueID="mainMenu">
+	<menu uniqueID="menu_reports" name="Звіти">
+		<menu uniqueID="menu_subsystem_1" name="Можна так )">
+			<menuitem uniqueID="rep_1" name="Список підстанцій" rtfTemplate="./reps/rtf/shSubstations.rtf" dataTemplate="" query="select * from lstSubstation where idSubstation > 0" params="" default="true" mnemonic="L" accelerator="alt L"/>
+		</menu>
+		<menuitem uniqueID="rep_1" name="Електроенергія за добу" rtfTemplate="./reps/rtf/shEnergyAccount.rtf" 
+				dataTemplate="./reps/DataTemplates/dtEnergyAccount.xml" query="" params="p_idAccount;p_dtBeg;p_dtEnd;p_Capt" mnemonic="E" accelerator="alt E"/>
+		<menuitem uniqueID="rep_1" name="Електроенергія по тарифах" rtfTemplate="./reps/rtf/shEnergyTarifAccount.rtf" 
+				dataTemplate="./reps/DataTemplates/dtEnergyTarifAccount.xml" query="" params="p_idAccount;p_dtBeg;p_dtEnd;p_Capt" mnemonic="T" accelerator="alt T"/>
+		<menuitem uniqueID="rep_1" name="Профіль навантаження" rtfTemplate="./reps/rtf/shProfileAccount.rtf" 
+				dataTemplate="./reps/DataTemplates/dtProfileAccount.xml" query="" params="p_idAccount;p_dtBeg;p_dtEnd;p_Capt;p_nFactory" mnemonic="P" accelerator="alt P"/>
+	</menu>
+
+	<menu uniqueID="menu_reports2" name="Діагностика">
+		<menuitem uniqueID="rep_1" name="Опитування" rtfTemplate="./reps/rtf/shDiagn.rtf" 
+				dataTemplate="./reps/DataTemplates/dtDiagnAccount.xml" query="" params="p_idAccount;p_dtBeg;p_dtEnd;p_Capt" mnemonic="D" accelerator="alt D"/>
+	</menu>
+
+	<menu uniqueID="menu_reports2" name="Export">
+		<menuitem uniqueID="Export_1" name="Excel" format="excel" icon="./ico/excel.png" borderInsets="2;-12;2;-5"/>
+		<menuitem uniqueID="Export_2" name="PDF" format="pdf" icon="./ico/pdf.png" borderInsets="2;-12;2;-5"/>
+		<menuitem uniqueID="Export_3" name="GIF" format="gif" icon="./ico/gif.png" borderInsets="2;-12;2;-5"/>
+		<menuitem uniqueID="Export_4" name="RTF" format="rtf" icon="./ico/word.png" borderInsets="2;-12;2;-5"/>
+	</menu>
+
+	<panel align="center">
+		<item uniqueID="lbl" type="label" name="Період з: "/>
+		<item uniqueID="dtBeg" type="calendar" format="  dd.MM.yyyy" size="100;20"/>
+		<item uniqueID="lbl" type="label" name=" по: "/>
+		<item uniqueID="dtEnd" type="calendar" format="  dd.MM.yyyy" size="100;20"/>
+	</panel>
+
+	<panel align="right">
+		<item uniqueID="lb" type="label" name="Активний звіт:" color="RGB(0;0;0)"/>
+		<item uniqueID="lbActiveReport" type="label" name="Активний звіт" color="RGB(255;0;0)"/>
+		<item uniqueID="btnExit" type="button" name="Вихід" size="100;20"/>
+	</panel>
+</menubar>

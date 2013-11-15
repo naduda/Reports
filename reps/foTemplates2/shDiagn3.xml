@@ -1,0 +1,71 @@
+<?xml version = '1.0' encoding = 'utf-8'?>
+<xsl:stylesheet version="2.0"
+				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:fo="http://www.w3.org/1999/XSL/Format"
+				xmlns:xdofo="http://xmlns.oracle.com/oxp/fo/extensions">
+	<xsl:template match="/">
+		<fo:root>
+			<xdofo:properties>
+				<xdofo:property name="default-tab-width">35.4pt</xdofo:property>
+			</xdofo:properties>
+			<fo:layout-master-set>
+				<fo:simple-page-master master-name="master0" margin-left="51.3pt" margin-right="22.95pt" page-height="841.9pt" page-width="595.3pt" margin-top="28.35pt" margin-bottom="35.45pt">
+					<fo:region-before region-name="region-header" extent="0.0pt"/>
+					<fo:region-body region-name="region-body" margin-top="0.0pt" margin-bottom="21.25pt"/>
+					<fo:region-after region-name="region-footer" extent="21.25pt" display-align="after"/>
+				</fo:simple-page-master>
+			</fo:layout-master-set>
+			<fo:page-sequence master-reference="master0">
+				<fo:static-content flow-name="region-header"/>
+				<fo:static-content flow-name="region-footer"/>
+				<fo:flow flow-name="region-body">
+					<fo:block xdofo:line-spacing="multiple:13.8pt" xdofo:xliff-note="dtBeg, dtEnd, Capt" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="5.4pt" text-align="center" padding-bottom="10.0pt" end-indent="5.4pt" padding-top="0.0pt" height="0.0pt">
+						<fo:inline xml:space="preserve" white-space-collapse="false" style-name="Normal" height="0.0pt" font-family-generic="modern" font-family="Courier New" font-size="14.0pt" style-id="s0" font-style="italic" font-weight="bold">
+Події лічильника <xsl:value-of select="(.//Capt)[1]"/>					  
+						</fo:inline>
+					</fo:block>
+					<fo:block xdofo:line-spacing="multiple:13.8pt" orphans="2" widows="2" linefeed-treatment="preserve" text-align="center" padding-bottom="0.5pt" end-indent="5.4pt" padding-top="0.5pt">
+						<fo:table start-indent="0.0pt" style-id="ts15" style-name="Table Grid" xdofo:align="center" width="" xdofo:table-summary="Template Table 1" xdofo:row-header-count="0">
+							<fo:table-column column-width="200pt"/>
+							<fo:table-column column-width="300pt"/>
+							<fo:table-body>
+								<fo:table-row>
+									<fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
+Дата/час</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
+Подія</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								<xsl:for-each select="/DATA/LIST_ROW/ROW" xdofo:ctx="3">
+									<fo:table-row xdofo:repeat="R">
+										<fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="for, Chanel" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="left" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0pt">
+												<fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of select="substring((.//DTEVENT)[1],9,2)"/>.<xsl:value-of select="substring((.//DTEVENT)[1],6,2)"/>_<xsl:value-of select="substring((.//DTEVENT)[1],12,8)"/>
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+										<fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="DataStart" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="left" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0.0pt">
+												<fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of select="(.//CAPTEVENT)[1]"/>
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+									</fo:table-row>
+								</xsl:for-each>
+							</fo:table-body>
+						</fo:table>
+					</fo:block>
+				</fo:flow>
+			</fo:page-sequence>
+		</fo:root>
+	</xsl:template>
+</xsl:stylesheet>

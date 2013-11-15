@@ -1,0 +1,20 @@
+<config version="1.0.0" xmlns="http://xmlns.oracle.com/oxp/config/">
+   <fonts>
+      <!-- Font setting (for FO to PDF etc...) --> 
+      <font family="Arial" style="normal" weight="normal">
+         <truetype path="d:/Downloads/Dropbox/JAVA/reps/arial.ttf" />
+      </font>
+      <font family="Courier New" style="normal" weight="normal">
+         <truetype path="d:/Downloads/Dropbox/JAVA/reps/fonts/cour.ttf" />
+      </font>
+      <font family="Courier New" style="italic" weight="bold">
+         <truetype path="d:/Downloads/Dropbox/JAVA/reps/fonts/courbi.ttf" />
+      </font>
+      <font family="Courier New" style="normal" weight="bold">
+         <truetype path="d:/Downloads/Dropbox/JAVA/reps/fonts/courbd.ttf" />
+      </font>
+      <font family="Courier New" style="italic" weight="normal">
+         <truetype path="d:/Downloads/Dropbox/JAVA/reps/fonts/couri.ttf" />
+      </font>
+   </fonts>
+</config>

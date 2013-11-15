@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dataTemplate name="DATA">
+	<parameters>
+		<parameter name="p_idNode" dataType="character"/>
+		<parameter name="p_idMeter" dataType="character"/>
+		<parameter name="p_dtBeg" dataType="character"/>
+		<parameter name="p_dtEnd" dataType="character"/>
+		<parameter name="p_capt" dataType="character"/>
+		<parameter name="p_nfactory" dataType="character"/>
+	</parameters>
+	<dataQuery>
+		<sqlStatement name="qMeters">
+			<![CDATA[
+				set dateformat dmy
+				go
+				select dateadd(minute, datepart(TZoffset, sysdatetimeoffset()), dtValOt) as dtValOt, 
+				isnull(AIn,0) as AIn, isnull(AOut,0) as AOut, isnull(RIn,0) as RIn, isnull(ROut,0) as ROut
+				from MRDMGetProfileHour(:p_idNode, :p_idMeter, :p_dtBeg, :p_dtEnd)
+			]]>
+		</sqlStatement>
+	</dataQuery>
+	<dataStructure>
+		<group name="ROW" source="qMeters">
+			<element name="dtValOt" value="dtValOt"/>
+			<element name="AIn" value="AIn"/>
+			<element name="AOut" value="AOut"/>
+			<element name="RIn" value="RIn"/>
+			<element name="ROut" value="ROut"/>
+		</group>
+	</dataStructure>
+</dataTemplate>

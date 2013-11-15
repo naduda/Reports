@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dataTemplate name="DATA">
+	<parameters>
+		<parameter name="p_idNode" dataType="character"/>
+		<parameter name="p_idMeter" dataType="character"/>
+		<parameter name="p_dtBeg" dataType="character"/>
+		<parameter name="p_dtEnd" dataType="character"/>
+		<parameter name="p_capt" dataType="character"/>
+		<parameter name="p_nFactory" dataType="character"/>
+	</parameters>
+	<dataQuery>
+		<sqlStatement name="qMeters">
+			<![CDATA[
+				set dateformat dmy
+				go
+				select Chanel, isnull(DataStart,0) as DataStart, isnull(DataEnd,0) as DataEnd
+				from fGetEnergy(:p_idNode, :p_idMeter,  null, 'meter', :p_dtBeg, :p_dtEnd,'Вт·г', 'ВАр·г')
+			]]>
+		</sqlStatement>
+	</dataQuery>
+	<dataStructure>
+		<group name="ROW" source="qMeters">
+			<element name="Chanel" value="Chanel"/>
+			<element name="DataStart" value="DataStart"/>
+			<element name="DataEnd" value="DataEnd"/>
+		</group>
+	</dataStructure>
+</dataTemplate>
