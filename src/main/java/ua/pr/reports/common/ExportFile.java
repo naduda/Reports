@@ -3,16 +3,14 @@ package ua.pr.reports.common;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-import ua.pr.reports.CreateReport;
-
-public class Tools {
+public class ExportFile {
 	private CreateReport cr;
 	
-	public Tools(CreateReport cr) {
+	public ExportFile(CreateReport cr) {
 		this.cr = cr;
 	}
 	
-	public void exportFile(byte format) {
+	public void exequte(byte format) {
 		
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Сохранение файла");

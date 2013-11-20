@@ -1,59 +1,36 @@
 package ua.pr.reports.ui.tools;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import java.io.Serializable;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-
 import oracle.xdo.template.FOProcessor;
 import ua.pr.common.ToolsPrLib;
-import ua.pr.model.ModelDB;
-import ua.pr.model.orm.Account;
-import ua.pr.model.orm.LinkAccount;
-import ua.pr.model.orm.Meter;
-import ua.pr.model.orm.Substation;
-import ua.pr.reports.CreateReport;
-import ua.pr.reports.Main;
-import ua.pr.reports.common.Tools;
+import ua.pr.reports.common.CreateReport;
+import ua.pr.reports.common.ExportFile;
 import ua.pr.reports.common.Template;
+import ua.pr.reports.ui.MainFrame;
 import ua.pr.ui.login.ILogin;
 
-public class SetFrameComponent {
-	private DefaultMutableTreeNode selectedNode = null;
-	private ModelDB mdb;
-	private DefaultTreeModel treeModel;
+public class SetFrameComponent implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private MainFrame mainFrame;
 	
-	public SetFrameComponent() {
-		mdb = new ModelDB();
+	public SetFrameComponent(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 	}
 	
-	public ModelDB getMdb() {
-		return mdb;
-	}
-	
-	public void setReports(JComponent menu, List<JMenuItem> items, CreateReport cReport) {
+	public void setReports(JComponent menu, CreateReport cReport) {
 		if (menu.getClass() == JMenuBar.class) {
 			for (int i = 0; i < menu.getComponentCount(); i++) {
-				setReports((JComponent) menu.getComponent(i), items, cReport);
+				setReports((JComponent) menu.getComponent(i), cReport);
 			}		
 		} else if (menu.getClass() == JMenu.class) {
 			for (int i = 0; i < ((JMenu)menu).getItemCount(); i++) {
@@ -84,16 +61,17 @@ public class SetFrameComponent {
 						
 						item.addActionListener(new ActionListenerJMenuItem(fopFormat, cReport));
 					} else {
-						item.addActionListener(new ActionListenerJMenuItem(template, Main.lbActiveReport, cReport));
+						item.addActionListener(new ActionListenerJMenuItem(template, mainFrame.getLbActiveReport(), cReport));
 					}
-					items.add(item);
+
 					String def = (String) item.getClientProperty("default");
 					if ((def != null) && (def.toString().toLowerCase().equals("true"))) {
-						Main.cr.setTemplate(template);
-						Main.lbActiveReport.setText(template.getName());
+						
+						mainFrame.getCreateReport().setTemplate(template);
+						mainFrame.getLbActiveReport().setText(template.getName());
 					}
 				} else if (item.getClass() == JMenu.class) {
-					setReports((JMenu)item, items, cReport);
+					setReports((JMenu)item, cReport);
 				}
 			}
 		}
@@ -105,69 +83,10 @@ public class SetFrameComponent {
 		JLabel lb = new JLabel(String.format(status, login.getServer(), login.getDB(), login.getUser()));
 		panel.add(lb);
 	}
-	
-	public void setTree(CreateReport cRep) {
-		String rootText;
-		try {
-			rootText = mdb.getSubstationById(0).getName();
-		} catch (Exception e) {
-			rootText = "Підстанції";
-		}
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootText);
-		treeModel = new DefaultTreeModel(root, true);
-//		-----------------------------------------------------------------------------		
-		List<Substation> allSubstations = mdb.allSubstations();
-		for (Substation s : allSubstations) {
-			DefaultMutableTreeNode nodeSubstation = new DefaultMutableTreeNode(s, true);
-			root.add(nodeSubstation);
-		}
-//		-----------------------------------------------------------------------------
-		JTree tree = new JTree(treeModel);
-		tree.addTreeSelectionListener(new SelectionL(cRep));
-		tree.addTreeExpansionListener(new ExpansionL());
-		tree.setCellRenderer(new NodeIcons());
-		Main.treePanel.setViewportView(tree);
-	}
-	
-	class NodeIcons extends DefaultTreeCellRenderer {		
-		private static final long serialVersionUID = 1L;
-		private Icon icon;
-
-		public Component getTreeCellRendererComponent(JTree tree, Object value,
-				boolean selected, boolean expanded, boolean leaf, int row,
-				boolean hasFocus) {
-
-			super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-			Object o = ((DefaultMutableTreeNode) value).getUserObject();
-			if (o.getClass() == Substation.class) {
-				Substation s = (Substation)o;
-
-				icon = new ImageIcon("d:/TempNet/ico/Substation.png");
-				setIcon(icon);
-				setText(s.getName());
-			} else if (o.getClass() == Account.class) {
-				Account a = (Account)o;
-
-				icon = new ImageIcon("d:/TempNet/ico/account.png");
-				setIcon(icon);
-				setText(a.getCapt());
-			} else if (o.getClass() == Meter.class) {
-				Meter m = (Meter)o;
-
-				icon = new ImageIcon("d:/TempNet/ico/Meter.png");
-				setIcon(icon);
-				setText(m.getCapt());
-			} else {
-				setIcon(null);
-				setText("   " + value);
-            }
-			
-			return this;
-		}
 		
-	}
-	
-	class ActionListenerJMenuItem implements ActionListener {
+	class ActionListenerJMenuItem implements ActionListener, Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private Template template;
 		private JLabel lbActiveReport;
 		private CreateReport cRep;
@@ -189,15 +108,15 @@ public class SetFrameComponent {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (export) {
-				Tools exp = new Tools(cRep);
-				exp.exportFile(format);
+				ExportFile exp = new ExportFile(cRep);
+				exp.exequte(format);
 			} else {
 				lbActiveReport.setText(template.getName());
 				lbActiveReport.setPreferredSize(lbActiveReport.getMaximumSize());
 	
 				cRep.setTemplate(template);
 				try {
-					cRep.createReport();
+					cRep.createReport(mainFrame);
 				} catch (Exception e2) {
 					System.err.println("CreateReport.create().....");
 				}
@@ -210,56 +129,6 @@ public class SetFrameComponent {
 
 		public void setExport(boolean export) {
 			this.export = export;
-		}
-	}
-	
-	class ExpansionL implements TreeExpansionListener {
-		public void treeCollapsed(TreeExpansionEvent arg0) {
-			
-		}
-
-		public void treeExpanded(TreeExpansionEvent event) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
-			if (node.getChildCount() == 0) {
-				Object obj = node.getUserObject();
-				if (obj.getClass() == Substation.class) {
-					Substation s = (Substation) obj;
-					for (Account a : s.getAccounts()) {
-						DefaultMutableTreeNode nodeAccount = new DefaultMutableTreeNode(a, true);
-						node.add(nodeAccount);
-					}
-					treeModel.reload(node);
-				} else	if (obj.getClass() == Account.class) {
-					Account a = (Account) obj;
-					for (LinkAccount la : a.getLinkAccounts()) {
-						for (Meter m : la.getMeters()) {
-							DefaultMutableTreeNode nodeMeter = new DefaultMutableTreeNode(m, false);
-							node.add(nodeMeter);
-						}	
-					}
-					treeModel.reload(node);
-				}
-			}
-		}		
-	}
-	
-	class SelectionL implements TreeSelectionListener {
-		private CreateReport cRep;
-		
-		public SelectionL(CreateReport cRep) {
-			this.cRep = cRep;
-		}
-		
-		public void valueChanged(TreeSelectionEvent e) {
-			JTree tree = (JTree)e.getSource();
-			TreePath[] selected = tree.getSelectionPaths();
-
-			TreePath path = selected[0];
-
-			selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-			Main.selectedObject = selectedNode.getUserObject();
-			
-			cRep.createReport();
 		}
 	}
 }

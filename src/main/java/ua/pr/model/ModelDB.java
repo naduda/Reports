@@ -1,5 +1,6 @@
 package ua.pr.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,21 +22,26 @@ import ua.pr.model.orm.Soket;
 import ua.pr.model.orm.Substation;
 import ua.pr.model.orm.TypeMeter;
 
-public class ModelDB {
+public class ModelDB implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
-	private static SessionFactory sFactory;
-	public static Session session;
-	public static java.sql.Connection conn;
+	private Properties prop;
+	transient private SessionFactory sFactory;
+	transient private Session session;
+	transient private java.sql.Connection conn;
+	
 	
 	public ModelDB() {
+		prop = new Properties();
+		prop.setProperty("hibernate.connection.url", "jdbc:sqlserver://46.201.240.87:1433;databaseName=KPVP");
+		prop.setProperty("hibernate.connection.username", "ukreni");
+		prop.setProperty("hibernate.connection.password", "pfdpbgdq");
+		prop.setProperty("dialect", "org.hibernate.dialect.SQLServerDialect");
+		prop.setProperty("hibernate.show_sql", "true");
+	}
+	
+	public SessionFactory getsFactory() {
 		try {
-			Properties prop= new Properties();
-			prop.setProperty("hibernate.connection.url", "jdbc:sqlserver://46.201.240.87:1433;databaseName=KPVP");
-			prop.setProperty("hibernate.connection.username", "ukreni");
-			prop.setProperty("hibernate.connection.password", "pfdpbgdq");
-			prop.setProperty("dialect", "org.hibernate.dialect.SQLServerDialect");
-			prop.setProperty("hibernate.show_sql", "true");
-			
 			Configuration cfg = new Configuration();
 			cfg.setProperties(prop);
 			cfg.addAnnotatedClass(Substation.class);
@@ -52,18 +58,30 @@ public class ModelDB {
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(prop).buildServiceRegistry();
 			
 			sFactory = cfg.buildSessionFactory(serviceRegistry);
-			session = sFactory.openSession();
-			conn = (java.sql.Connection) ((SessionImpl)session).connection();
 		} catch (Throwable ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
+		return sFactory;
 	}
-	
+
+	public Session getSession() {
+		session = getsFactory().openSession();
+		return session;
+	}
+
+	public java.sql.Connection getConn() {
+		if (session == null) {
+			session = getSession();
+		}
+		conn = (java.sql.Connection) ((SessionImpl)session).connection();
+		return conn;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Substation> allSubstations() {
 		List<Substation> result = null;
 		
-		result = session.createQuery("select s from Substation s where s.idSubstation > 0").list();
+		result = getSession().createQuery("select s from Substation s where s.idSubstation > 0").list();
 		return result;
 	}
 	
@@ -73,11 +91,4 @@ public class ModelDB {
 		result = (Substation) session.get(Substation.class, new Integer(idSubstation));
 		return result;
 	}
-	
-//	@SuppressWarnings("unchecked")
-//	public List<Account> getAccountByIdSubstation(int idSubstation) {
-//		List<Account> result = null;
-//		result = session.createQuery("select a from Account a where a.IdSubstation = 1").list();
-//		return result;
-//	}
 }

@@ -1,4 +1,4 @@
-package ua.pr.reports;
+package ua.pr.reports.common;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -6,29 +6,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.Hashtable;
 import javax.swing.JEditorPane;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
 import oracle.xdo.template.FOProcessor;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import ua.pr.model.ModelDB;
-import ua.pr.reports.common.Parameters;
-import ua.pr.reports.common.Template;
+import ua.pr.reports.Main;
+import ua.pr.reports.ui.MainFrame;
 import ua.pr.xslt.DataXSLT;
 import ua.pr.xslt.ReportXSLT;
 
-public class CreateReport {
+public class CreateReport implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Template template;
 	private JDatePickerImpl dtBeg;
 	private JDatePickerImpl dtEnd;
 	private String xdocfgPath = "xdo.xml";
+	private MainFrame mainFrame;
 	
-	public ByteArrayOutputStream res;
+	transient private ByteArrayOutputStream res;
 	
-	public void createReport() {
+	public void createReport(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;		
 		create(FOProcessor.FORMAT_HTML, null);
 		try {
+//			create(FOProcessor.FORMAT_HTML, null);
+			
 			JEditorPane editor = new JEditorPane();
 			HTMLEditorKit htmlEK = new HTMLEditorKit();
 			
@@ -44,22 +50,22 @@ public class CreateReport {
 			editor.setContentType("text/html; charset=UTF-8");
 			editor.setEditable(false);
 
-			Main.reportPanel.setViewportView(editor);
-			Main.reportPanel.revalidate();
-			Main.reportPanel.repaint();
+			mainFrame.getReportPanel().setViewportView(editor);
+			mainFrame.getReportPanel().revalidate();
+			mainFrame.getReportPanel().repaint();
 		} catch (Exception ex) {
 			System.err.println("..... " + ex);
 		}
 	}
 	
 	public void create(byte fopFormat, String outputFileName) {
-		DataXSLT data = new DataXSLT(ModelDB.conn);
+		DataXSLT data = new DataXSLT(Main.getMdb().getConn());
 		ByteArrayOutputStream baData = null;
 		
 		Hashtable<String, String> pars = new Hashtable<String, String>();
 //		---------------------------------------------------------------------------------
 		if (template.getParams().trim().length() > 0) {
-			Parameters foParams = new Parameters(dtBeg, dtEnd, Main.selectedObject);
+			Parameters foParams = new Parameters(dtBeg, dtEnd, mainFrame.getSelectedObject());
 			foParams.setParameters(pars, template.getParams());
 		}
 //		---------------------------------------------------------------------------------		
@@ -91,6 +97,7 @@ public class CreateReport {
 		res = rX.getReport(baData, foTemplate, fopFormat, outputFileName);
 	}
 	
+//	Getters and Setters
 	public Template getTemplate() {
 		return template;
 	}
@@ -121,5 +128,9 @@ public class CreateReport {
 
 	public void setXdocfgPath(String xdocfgPath) {
 		this.xdocfgPath = xdocfgPath;
+	}
+
+	public MainFrame getMainFrame() {
+		return mainFrame;
 	}
 }

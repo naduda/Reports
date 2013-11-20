@@ -1,32 +1,22 @@
 package ua.pr.reports;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
+import javax.swing.JTree;
 import javax.swing.UIManager;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.DefaultMutableTreeNode;
 
-import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import ua.pr.common.StringCrypter;
-import ua.pr.menu.FrameXMLMenuLoader;
-import ua.pr.menu.XMLMenuLoader;
 import ua.pr.model.ModelDB;
-import ua.pr.reports.ui.tools.SetFrameComponent;
+import ua.pr.reports.ui.MainFrame;
+import ua.pr.reports.ui.TreePanel;
 import ua.pr.reports.xml.EntityFromXML;
 import ua.pr.reports.xml.objects.Base;
 import ua.pr.reports.xml.objects.Login;
@@ -36,14 +26,9 @@ public class Main {
 
 	private static final String CONNECTION_STRING = "jdbc:sqlserver://%s:1433;user=%s;password=%s";
 	private static final String CONNECT_XML_PATH = "Settings.xml";
-	private static final String MENU_XML_PATH = "Menu.xml";
-	private static final String DATE_FORMAT = " dd.MM.yyyy' p. '";
-	
-	public static JScrollPane reportPanel;
-	public static JScrollPane treePanel;
-	public static JLabel lbActiveReport;
-	public static CreateReport cr;
-	public static Object selectedObject;
+	private static MainFrame frm;
+
+	private static ModelDB mdb;
 	
 	public static void main(String[] args) {
 		try {
@@ -60,6 +45,7 @@ public class Main {
 //		--------------------------------------------------------------------------		
 		StringCrypter crypter = new StringCrypter(new byte[]{2,3,0,2,1,9,8,4});
 		login.setPassword(crypter.decrypt(login.getPassword()));
+		base.setLogin(login);
 //		--------------------------------------------------------------------------
 		new LoginDialog(new JFrame(), login);
 		if (login.isSave()) {
@@ -68,83 +54,79 @@ public class Main {
 			efx.setObject(CONNECT_XML_PATH, base);
 		}
 //		--------------------------------------------------------------------------
-		FrameXMLMenuLoader frm = new FrameXMLMenuLoader(base.getMainForm().getTitle(), MENU_XML_PATH);
-
-		String icoPath = base.getMainForm().getIcoPath();
-		if (icoPath != null) {
-			ImageIcon img = new ImageIcon(icoPath);
-			frm.setIconImage(img.getImage());
-		}
-		
-		XMLMenuLoader loader = frm.getLoader();
-
-		JDatePickerImpl dtBeg = (JDatePickerImpl) loader.getMenuItem("dtBeg");
-		JDatePickerImpl dtEnd = (JDatePickerImpl) loader.getMenuItem("dtEnd");
-		
-		JMenuBar menuBar = loader.getMenuBar("mainMenu");
-		JButton btnExit = (JButton) loader.getMenuItem("btnExit");
-		lbActiveReport = (JLabel) loader.getMenuItem("lbActiveReport");
-		
-		dtBeg.setDateFormate(DATE_FORMAT);
-		dtEnd.setDateFormate(DATE_FORMAT);
-		Calendar calendar = Calendar.getInstance();
-		dtEnd.setDate(calendar);
-		calendar.add(Calendar.DATE, -1);
-		dtBeg.setDate(calendar);
-//		-------------------------------------------
-		ActionListener aList = new ActionListener() {			
-			public void actionPerformed(ActionEvent e) {
+		MainFrame mainFrame = null;
+		File frmState = new File("d:/mainFrame");
+		if (frmState.exists()) {
+			ObjectInputStream ois = null;
+			try {
+				ois = new ObjectInputStream(new FileInputStream(new File("d:/mainFrame")));
+				setFrm((MainFrame) ois.readObject());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
 				try {
-					cr.createReport();
-				} catch (Exception ex) {
-					System.err.println(".... " + ex);
+					ois.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-		};
-		dtBeg.addActionListener(aList);
-		dtEnd.addActionListener(aList);
-//		-------------------------------------------
-		btnExit.addActionListener(new ActionListener() {			
-			public void actionPerformed(ActionEvent arg0) {
-				ModelDB.session.close();
-				System.out.println("Session close.");
-				System.exit(0);
+		} else {
+			mainFrame = new MainFrame(base);
+			setFrm(mainFrame);
+			frm.pack();
+		}
+
+		DefaultMutableTreeNode searchNode = null;
+		if (frm.getTreePanel() != null) {
+			searchNode = frm.getTreePanel().getSelectedNode();
+		}
+		
+		frm.setTreePanel(new TreePanel());	
+		
+		if (searchNode != null) {
+			JTree tree = frm.getTreePanel().getTree();
+				        
+	        DefaultMutableTreeNode par = (DefaultMutableTreeNode)searchNode.getParent();
+	        DefaultMutableTreeNode searchNode2 = searchNode;
+	        List<Integer> lsIndex = new ArrayList<Integer>();
+	        while (par.getLevel() > 0) {
+	        	lsIndex.add(par.getIndex(searchNode2));
+				searchNode2 = par;
+				par = (DefaultMutableTreeNode)par.getParent();
 			}
-		});
+	        lsIndex.add(par.getIndex(searchNode2));
+	        
+	        System.out.println("----------------------------------");
+	        DefaultMutableTreeNode root = (DefaultMutableTreeNode)tree.getModel().getRoot();
+	        searchNode2 = (DefaultMutableTreeNode)root.getChildAt(lsIndex.get(lsIndex.size() - 1));
+	        TreePath path = new TreePath(searchNode2.getPath());
+	        tree.expandPath(path);
+	        for (int i = lsIndex.size() - 2; i > 0; i--) {
+	        	searchNode2 = (DefaultMutableTreeNode) searchNode2.getChildAt(lsIndex.get(i));
+	        	path = new TreePath(searchNode2.getPath());
+	        	tree.expandPath(path);
+			}
+	        searchNode2 = (DefaultMutableTreeNode) searchNode2.getChildAt(lsIndex.get(0));
+	        path = new TreePath(searchNode2.getPath());
+	        
+	        tree.setSelectionPath(path);
+		}
 		
-//		--------------------------------------------------------------------------
-		final SetFrameComponent frmComponents = new SetFrameComponent();
-//		--------------------------------------------------------------------------
-		treePanel = new JScrollPane();
-		reportPanel = new JScrollPane();
-		JSplitPane splitMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treePanel, reportPanel);
-				
-		splitMain.setLeftComponent(treePanel);
-//		--------------------------------------------------------------------------
-		cr = new CreateReport();
-		cr.setDtBeg(dtBeg);
-		cr.setDtEnd(dtEnd);
-//		--------------------------------------------------------------------------
-		List<JMenuItem> reports = new ArrayList<JMenuItem>();
-		frmComponents.setReports(menuBar, reports, cr);
-		frmComponents.setTree(cr);
-//		--------------------------------------------------------------------------
-		JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		frmComponents.setStatusBar(statusBar, login);
-		
-//		--------------------------------------------------------------------------
-		frm.add(splitMain, BorderLayout.CENTER);
-		frm.add(statusBar, BorderLayout.SOUTH);
-		frm.addWindowListener(new WindowAdapter() {
-		    @Override
-		    public void windowClosing(WindowEvent we) {
-		    	ModelDB.session.close();
-				System.out.println("Session close.");
-		    }
-		});
-//		frm.setLocationRelativeTo(null);
-		cr.createReport();
-		frm.pack();
-		frm.setVisible(true);	
+		frm.setVisible(true);
+	}
+
+	public static ModelDB getMdb() {
+		if (mdb == null) {
+			mdb = new ModelDB();
+		}
+		return mdb;
+	}
+
+	public static MainFrame getFrm() {
+		return frm;
+	}
+
+	public static void setFrm(MainFrame frm) {
+		Main.frm = frm;
 	}
 }
