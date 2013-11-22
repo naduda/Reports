@@ -14,6 +14,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import ua.pr.common.StringCrypter;
+import ua.pr.common.ToolsPrLib;
 import ua.pr.model.ModelDB;
 import ua.pr.reports.ui.MainFrame;
 import ua.pr.reports.ui.TreePanel;
@@ -26,17 +27,8 @@ public class Main {
 
 	private static final String CONNECTION_STRING = "jdbc:sqlserver://%s:1433;user=%s;password=%s";
 	private static final String CONNECT_XML_PATH = "Settings.xml";
-	private static MainFrame frm;
-
-	private static ModelDB mdb;
 	
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public Main() {
 //		--------------------------------------------------------------------------
 		EntityFromXML efx = new EntityFromXML();
 		Base base = (Base)efx.getObject(CONNECT_XML_PATH, Base.class);
@@ -54,13 +46,15 @@ public class Main {
 			efx.setObject(CONNECT_XML_PATH, base);
 		}
 //		--------------------------------------------------------------------------
+		ModelDB mdb = new ModelDB(login);
 		MainFrame mainFrame = null;
-		File frmState = new File("d:/mainFrame");
+		String pathOfFormState = ToolsPrLib.getFullPath(base.getMainForm().getPathOfFormState());
+		File frmState = new File(pathOfFormState);
 		if (frmState.exists()) {
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(new FileInputStream(new File("d:/mainFrame")));
-				setFrm((MainFrame) ois.readObject());
+				ois = new ObjectInputStream(new FileInputStream(frmState));
+				mainFrame = ((MainFrame) ois.readObject());
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -71,20 +65,19 @@ public class Main {
 				}
 			}
 		} else {
-			mainFrame = new MainFrame(base);
-			setFrm(mainFrame);
-			frm.pack();
+			mainFrame = new MainFrame(base, mdb);
+			mainFrame.pack();
 		}
-
+//		---------------------------------------------------------------------
 		DefaultMutableTreeNode searchNode = null;
-		if (frm.getTreePanel() != null) {
-			searchNode = frm.getTreePanel().getSelectedNode();
+		if (mainFrame.getTreePanel() != null) {
+			searchNode = mainFrame.getTreePanel().getSelectedNode();
 		}
 		
-		frm.setTreePanel(new TreePanel());	
+		mainFrame.setTreePanel(new TreePanel(mdb, base));	
 		
 		if (searchNode != null) {
-			JTree tree = frm.getTreePanel().getTree();
+			JTree tree = mainFrame.getTreePanel().getTree();
 				        
 	        DefaultMutableTreeNode par = (DefaultMutableTreeNode)searchNode.getParent();
 	        DefaultMutableTreeNode searchNode2 = searchNode;
@@ -110,23 +103,20 @@ public class Main {
 	        path = new TreePath(searchNode2.getPath());
 	        
 	        tree.setSelectionPath(path);
+		} else {
+			mainFrame.getCreateReport().createReport(mainFrame);
 		}
 		
-		frm.setVisible(true);
+		mainFrame.setVisible(true);	
 	}
-
-	public static ModelDB getMdb() {
-		if (mdb == null) {
-			mdb = new ModelDB();
+	
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return mdb;
-	}
 
-	public static MainFrame getFrm() {
-		return frm;
-	}
-
-	public static void setFrm(MainFrame frm) {
-		Main.frm = frm;
+		new Main();	
 	}
 }

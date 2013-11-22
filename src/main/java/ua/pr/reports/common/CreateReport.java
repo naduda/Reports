@@ -4,16 +4,23 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Hashtable;
+
 import javax.swing.JEditorPane;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
+
 import oracle.xdo.template.FOProcessor;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import ua.pr.reports.Main;
+import ua.pr.common.ToolsPrLib;
 import ua.pr.reports.ui.MainFrame;
 import ua.pr.xslt.DataXSLT;
 import ua.pr.xslt.ReportXSLT;
@@ -31,9 +38,8 @@ public class CreateReport implements Serializable {
 	
 	public void createReport(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;		
-		create(FOProcessor.FORMAT_HTML, null);
 		try {
-//			create(FOProcessor.FORMAT_HTML, null);
+			create(FOProcessor.FORMAT_HTML, null);
 			
 			JEditorPane editor = new JEditorPane();
 			HTMLEditorKit htmlEK = new HTMLEditorKit();
@@ -45,7 +51,12 @@ public class CreateReport implements Serializable {
 			
 			doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
 			htmlEK.read(br, doc, 0);
-			int k = doc.getText(0, 100).indexOf("?>") + 2;
+			int k = 0;
+			try {
+				k = doc.getText(0, 48).indexOf("?>") + 2;
+			} catch (Exception e) {
+				System.out.println("doc length = " + doc.getLength() + " --- our lenth = 48");				
+			}
 			doc.remove(0, k);
 			editor.setContentType("text/html; charset=UTF-8");
 			editor.setEditable(false);
@@ -55,24 +66,27 @@ public class CreateReport implements Serializable {
 			mainFrame.getReportPanel().repaint();
 		} catch (Exception ex) {
 			System.err.println("..... " + ex);
+			ex.printStackTrace();
 		}
 	}
 	
 	public void create(byte fopFormat, String outputFileName) {
-		DataXSLT data = new DataXSLT(Main.getMdb().getConn());
+		DataXSLT data = new DataXSLT(mainFrame.getMdb().getConn());
 		ByteArrayOutputStream baData = null;
 		
 		Hashtable<String, String> pars = new Hashtable<String, String>();
 //		---------------------------------------------------------------------------------
-		if (template.getParams().trim().length() > 0) {
+		if ((template.getParams() != null) && (template.getParams().trim().length() > 0)) {
 			Parameters foParams = new Parameters(dtBeg, dtEnd, mainFrame.getSelectedObject());
 			foParams.setParameters(pars, template.getParams());
 		}
 //		---------------------------------------------------------------------------------		
-		String fileData = "d:/1.xml";
+		String fileData = ToolsPrLib.getFullPath(mainFrame.getBase().getReportsSettings().getDataXMLpath());
 		File ff = new File(fileData);
+
 		if (!ff.exists())
 		{
+			System.out.println("data...");
 			data.getData(template.getQuery(), template.getDataTemplate(), pars, fileData);
 		} 
 		baData = data.getData(template.getQuery(), template.getDataTemplate(), pars, null);
@@ -82,6 +96,21 @@ public class CreateReport implements Serializable {
 		rX.setXdoConfPath(xdocfgPath);
 
 		String[] strPath = template.getRtfTemplate().split("/");
+
+		String rtfFilePath = template.getRtfTemplate();
+		File rtfFile = new File(rtfFilePath);
+		if (!rtfFile.exists()) {
+			try {
+				String temp = rtfFilePath.replace(rtfFilePath.substring(rtfFilePath.lastIndexOf("/") + 1), "shTemp.rtf");
+				CopyOption[] options = new CopyOption[] {StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES};
+				Files.copy(Paths.get(temp), Paths.get(rtfFilePath), options);
+			} catch (IOException e) {
+				System.out.println("*******************");
+				e.printStackTrace();
+				System.out.println("*******************");
+			}
+		}
+		
 		String foTemplate = "";
 		for (int i = 0; i < strPath.length - 2; i++) {
 			foTemplate = foTemplate + strPath[i] + "/";

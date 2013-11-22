@@ -1,5 +1,7 @@
 package ua.pr.reports.xml.objects;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -9,7 +11,9 @@ import ua.pr.ui.login.ILogin;
 
 @SuppressWarnings("restriction")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Login implements ILogin{
+public class Login implements ILogin, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@XmlAttribute
 	private String server;
 	@XmlAttribute

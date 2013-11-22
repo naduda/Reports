@@ -23,9 +23,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import ua.pr.common.ToolsPrLib;
 import ua.pr.menu.FrameXMLMenuLoader;
 import ua.pr.menu.XMLMenuLoader;
-import ua.pr.reports.Main;
+import ua.pr.model.ModelDB;
 import ua.pr.reports.common.CreateReport;
 import ua.pr.reports.ui.tools.SetFrameComponent;
 import ua.pr.reports.xml.objects.Base;
@@ -44,13 +45,18 @@ public class MainFrame extends FrameXMLMenuLoader implements Serializable {
 	private Object selectedObject;
 	
 	private XMLMenuLoader loader;
+	private ModelDB mdb;
+	private Base base;
 	
-	public MainFrame(Base base) {
+	public MainFrame(Base base, ModelDB mdb) {		
 		super(base.getMainForm().getTitle(), MENU_XML_PATH);
 
+		this.mdb = mdb;
+		this.base = base;
+		
 		String icoPath = base.getMainForm().getIcoPath();
 		if (icoPath != null) {
-			ImageIcon img = new ImageIcon(icoPath);
+			ImageIcon img = new ImageIcon(icoPath + "/MainWindow.png");
 			setIconImage(img.getImage());
 		}
 		
@@ -147,7 +153,15 @@ public class MainFrame extends FrameXMLMenuLoader implements Serializable {
 		this.selectedObject = selectedObject;
 	}
 	
-//	---------------------------------------------------------------------------------------	
+	public ModelDB getMdb() {
+		return mdb;
+	}
+
+	public Base getBase() {
+		return base;
+	}
+
+	//	---------------------------------------------------------------------------------------	
 	class ActionListenerDate implements ActionListener, Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -165,7 +179,7 @@ public class MainFrame extends FrameXMLMenuLoader implements Serializable {
 
 		public void actionPerformed(ActionEvent arg0) {
 			MainFrame.this.setVisible(false);
-			Main.getMdb().getSession().close();
+			mdb.getSession().close();
 			System.out.println("Session close.");
 			System.exit(0);
 		}	
@@ -173,7 +187,8 @@ public class MainFrame extends FrameXMLMenuLoader implements Serializable {
 		public void windowClosing(WindowEvent e) {
 			ObjectOutputStream oos = null;
 			try {
-				oos = new ObjectOutputStream(new FileOutputStream(new File("d:/mainFrame")));
+				String pathOfFormState = ToolsPrLib.getFullPath(base.getMainForm().getPathOfFormState());
+				oos = new ObjectOutputStream(new FileOutputStream(new File(pathOfFormState)));
 				oos.writeObject(e.getSource());
 				System.out.println("end");
 			} catch (Exception e2) {

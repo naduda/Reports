@@ -21,6 +21,7 @@ import ua.pr.model.orm.Meter;
 import ua.pr.model.orm.Soket;
 import ua.pr.model.orm.Substation;
 import ua.pr.model.orm.TypeMeter;
+import ua.pr.reports.xml.objects.Login;
 
 public class ModelDB implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,11 +32,11 @@ public class ModelDB implements Serializable {
 	transient private java.sql.Connection conn;
 	
 	
-	public ModelDB() {
+	public ModelDB(Login login) {
 		prop = new Properties();
-		prop.setProperty("hibernate.connection.url", "jdbc:sqlserver://46.201.240.87:1433;databaseName=KPVP");
-		prop.setProperty("hibernate.connection.username", "ukreni");
-		prop.setProperty("hibernate.connection.password", "pfdpbgdq");
+		prop.setProperty("hibernate.connection.url", "jdbc:sqlserver://" + login.getServer() + ":1433;databaseName=" + login.getDB());
+		prop.setProperty("hibernate.connection.username", login.getUser());
+		prop.setProperty("hibernate.connection.password", login.getPassword());
 		prop.setProperty("dialect", "org.hibernate.dialect.SQLServerDialect");
 		prop.setProperty("hibernate.show_sql", "true");
 	}
@@ -81,7 +82,7 @@ public class ModelDB implements Serializable {
 	public List<Substation> allSubstations() {
 		List<Substation> result = null;
 		
-		result = getSession().createQuery("select s from Substation s where s.idSubstation > 0").list();
+		result = getSession().createQuery("select s from Substation s where s.idSubstation > 0 order by s.name").list();
 		return result;
 	}
 	

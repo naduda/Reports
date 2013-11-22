@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.Serializable;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
@@ -16,32 +17,37 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import ua.pr.common.ToolsPrLib;
+import ua.pr.model.ModelDB;
 import ua.pr.model.orm.Account;
 import ua.pr.model.orm.LinkAccount;
 import ua.pr.model.orm.Meter;
 import ua.pr.model.orm.Substation;
-import ua.pr.reports.Main;
 import ua.pr.reports.common.CreateReport;
+import ua.pr.reports.xml.objects.Base;
 
 public class TreePanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	
+	private static String icoFolder;
 	private DefaultTreeModel treeModel;	
 	private DefaultMutableTreeNode selectedNode;
 	private JTree tree;
 	private CreateReport createReport;
 
-	public TreePanel() {
+	public TreePanel(ModelDB mdb, Base base) {
+		icoFolder = ToolsPrLib.getFullPath(base.getMainForm().getIcoPath());
 		String rootText;
 		try {
-			rootText = Main.getMdb().getSubstationById(0).getName();
+			rootText = mdb.getSubstationById(0).getName();
 		} catch (Exception e) {
 			rootText = "Підстанції";
 		}
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootText);
 		treeModel = new DefaultTreeModel(root, true);
 	//	-----------------------------------------------------------------------------		
-		List<Substation> allSubstations = Main.getMdb().allSubstations();
+		List<Substation> allSubstations = mdb.allSubstations();
 		for (Substation s : allSubstations) {
 			DefaultMutableTreeNode nodeSubstation = new DefaultMutableTreeNode(s, true);
 			root.add(nodeSubstation);
@@ -52,7 +58,6 @@ public class TreePanel extends JScrollPane {
 		tree.addTreeExpansionListener(new ExpansionL());
 		tree.setCellRenderer(new NodeIcons());
 		setViewportView(tree);
-		System.out.println("tree created");
 	}
 //	Getters and Setters ---------------------------------------------------------------
 	public CreateReport getCreateReport() {
@@ -136,6 +141,7 @@ public class TreePanel extends JScrollPane {
 	
 	class NodeIcons extends DefaultTreeCellRenderer implements Serializable {		
 		private static final long serialVersionUID = 1L;
+		
 		private Icon icon;
 
 		public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -147,19 +153,19 @@ public class TreePanel extends JScrollPane {
 			if (o.getClass() == Substation.class) {
 				Substation s = (Substation)o;
 
-				icon = new ImageIcon("d:/TempNet/ico/Substation.png");
+				icon = new ImageIcon(icoFolder + "/Substation.png");
 				setIcon(icon);
 				setText(s.getName());
 			} else if (o.getClass() == Account.class) {
 				Account a = (Account)o;
 
-				icon = new ImageIcon("d:/TempNet/ico/account.png");
+				icon = new ImageIcon(icoFolder + "/account.png");
 				setIcon(icon);
 				setText(a.getCapt());
 			} else if (o.getClass() == Meter.class) {
 				Meter m = (Meter)o;
 
-				icon = new ImageIcon("d:/TempNet/ico/Meter.png");
+				icon = new ImageIcon(icoFolder + "/Meter.png");
 				setIcon(icon);
 				setText(m.getCapt());
 			} else {

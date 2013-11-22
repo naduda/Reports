@@ -1,7 +1,8 @@
 <menubar uniqueID="mainMenu">
 	<menu uniqueID="menu_reports" name="Звіти">
 		<menu uniqueID="menu_subsystem_1" name="Можна так )">
-			<menuitem uniqueID="rep_1" name="Список підстанцій" rtfTemplate="./reps/rtf/shSubstations.rtf" dataTemplate="" query="select * from lstSubstation where idSubstation > 0" params="" default="true" mnemonic="L" accelerator="alt L"/>
+			<menuitem uniqueID="rep_1" name="Список підстанцій" rtfTemplate="./reps/rtf/shSubstations.rtf" dataTemplate="" query="select * from lstSubstation where idSubstation > 0 order by name" params="" mnemonic="L" accelerator="alt L"/>
+			<menuitem uniqueID="rep_1" name="Загальна інформація" rtfTemplate="./reps/rtf/shInfo.rtf" dataTemplate="./reps/DataTemplates/dtInfo.xml" default="true" mnemonic="I" accelerator="alt I"/>
 		</menu>
 		<menuitem uniqueID="rep_1" name="Електроенергія за добу" rtfTemplate="./reps/rtf/shEnergyAccount.rtf" 
 				dataTemplate="./reps/DataTemplates/dtEnergyAccount.xml" query="" params="p_idAccount;p_dtBeg;p_dtEnd;p_Capt" mnemonic="E" accelerator="alt E"/>
