@@ -71,14 +71,14 @@ public class MainFrame extends FrameXMLMenuLoader implements Serializable {
 		
 		dtBeg.setDateFormate(DATE_FORMAT);
 		dtEnd.setDateFormate(DATE_FORMAT);
-		Calendar calendar = Calendar.getInstance();
-		dtEnd.setDate(calendar);
-		calendar.add(Calendar.DATE, -1);
-		dtBeg.setDate(calendar);
+		Calendar calendarE = Calendar.getInstance();
+		dtEnd.setDate(calendarE);
+		Calendar calendarB = Calendar.getInstance();	
+		calendarB.add(Calendar.DATE, -1);
+		dtBeg.setDate(calendarB);
 //		-------------------------------------------
 		dtBeg.addActionListener(new ActionListenerDate());
 		dtEnd.addActionListener(new ActionListenerDate());
-		System.out.println(dtBeg.getListeners(ActionListener.class).length);
 //		-------------------------------------------
 		btnExit.addActionListener(new WindowListenerMainFRM());	
 //		--------------------------------------------------------------------------

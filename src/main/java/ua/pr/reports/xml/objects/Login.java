@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import ua.pr.ui.login.ILogin;
 
-@SuppressWarnings("restriction")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Login implements ILogin, Serializable {
 	private static final long serialVersionUID = 1L;

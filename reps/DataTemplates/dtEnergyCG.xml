@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dataTemplate name="DATA">
 	<parameters>
-		<parameter name="p_idGroup" dataType="character"/>
-		<parameter name="p_dtBeg" dataType="character"/>
-		<parameter name="p_dtEnd" dataType="character"/>
-		<parameter name="p_capt" dataType="character"/>
+		<parameter name="p_idGroup" dataType="character" />
+		<parameter name="p_dtBeg" dataType="character" />
+		<parameter name="p_dtEnd" dataType="character" />
+		<parameter name="p_capt" dataType="character" />
 	</parameters>
 	<dataQuery>
 		<sqlStatement name="qMeters">
@@ -18,13 +18,13 @@
 					group by idobject
 			]]>
 		</sqlStatement>
-		
+
 	</dataQuery>
 	<dataStructure>
 		<group name="ROW" source="qMeters">
-			<element name="Capt" value="Capt"/>
-			<element name="valIn" value="valIn"/>
-			<element name="valOut" value="valOut"/>
+			<element name="Capt" value="Capt" />
+			<element name="valIn" value="valIn" />
+			<element name="valOut" value="valOut" />
 		</group>
 	</dataStructure>
 </dataTemplate>

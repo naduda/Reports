@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dataTemplate name="DATA">
 	<parameters>
-		<parameter name="p_nameObject" dataType="character" default="Кривбаспромводопостачання"/>
+		<parameter name="p_nameObject" dataType="character"
+			default="Кривбаспромводопостачання" />
 	</parameters>
 	<dataQuery>
 		<sqlStatement name="q1">
@@ -29,24 +30,24 @@
 			<![CDATA[
 				set dateformat dmy
 				go
-				select T.name as typeMeter, count(*) as countMeters from Meters M, TypeMeters T where T.idTypeMeter = M.idType group by T.name
+				select T.capt as typeMeter, count(*) as countMeters from Meters M, TypeMeters T where T.idTypeMeter = M.idType group by T.capt
 			]]>
 		</sqlStatement>
 	</dataQuery>
 	<dataStructure>
 		<group name="S" source="q1">
-			<element name="countSubstations" value="countSubstations"/>
+			<element name="countSubstations" value="countSubstations" />
 		</group>
 		<group name="A" source="q2">
-			<element name="countAccounts" value="countAccounts"/>
+			<element name="countAccounts" value="countAccounts" />
 		</group>
 		<group name="state" source="q3">
-			<element name="stateMeter" value="stateMeter"/>
-			<element name="count" value="count"/>
+			<element name="stateMeter" value="stateMeter" />
+			<element name="count" value="count" />
 		</group>
 		<group name="type" source="q4">
-			<element name="typeMeter" value="typeMeter"/>
-			<element name="countMeters" value="countMeters"/>
+			<element name="typeMeter" value="typeMeter" />
+			<element name="countMeters" value="countMeters" />
 		</group>
 	</dataStructure>
 </dataTemplate>

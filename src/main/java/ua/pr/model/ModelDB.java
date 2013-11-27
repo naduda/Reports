@@ -18,9 +18,12 @@ import ua.pr.model.orm.Device;
 import ua.pr.model.orm.LinkAccount;
 import ua.pr.model.orm.LstConnection;
 import ua.pr.model.orm.Meter;
+import ua.pr.model.orm.PgdiFileStorage;
+import ua.pr.model.orm.PgdiLink;
 import ua.pr.model.orm.Soket;
 import ua.pr.model.orm.Substation;
 import ua.pr.model.orm.TypeMeter;
+import ua.pr.model.orm.UserSetting;
 import ua.pr.reports.xml.objects.Login;
 
 public class ModelDB implements Serializable {
@@ -31,6 +34,7 @@ public class ModelDB implements Serializable {
 	transient private Session session;
 	transient private java.sql.Connection conn;
 	
+	private String query;
 	
 	public ModelDB(Login login) {
 		prop = new Properties();
@@ -55,6 +59,9 @@ public class ModelDB implements Serializable {
 			cfg.addAnnotatedClass(Device.class);
 			cfg.addAnnotatedClass(Soket.class);
 			cfg.addAnnotatedClass(ClassV.class);
+			cfg.addAnnotatedClass(UserSetting.class);
+			cfg.addAnnotatedClass(PgdiLink.class);
+			cfg.addAnnotatedClass(PgdiFileStorage.class);
 			
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(prop).buildServiceRegistry();
 			
@@ -82,7 +89,8 @@ public class ModelDB implements Serializable {
 	public List<Substation> allSubstations() {
 		List<Substation> result = null;
 		
-		result = getSession().createQuery("select s from Substation s where s.idSubstation > 0 order by s.name").list();
+		query = "select s from Substation s where s.idSubstation > 0 order by s.name";
+		result = getSession().createQuery(query).list();
 		return result;
 	}
 	
@@ -90,6 +98,14 @@ public class ModelDB implements Serializable {
 		Substation result = null;
 		
 		result = (Substation) session.get(Substation.class, new Integer(idSubstation));
+		return result;
+	}
+	
+	public UserSetting getUser(String name) {
+		UserSetting result = null;
+		
+		query = String.format("select s from UserSetting s where s.nameUser = '%s'", name);
+		result = (UserSetting) getSession().createQuery(query).uniqueResult();
 		return result;
 	}
 }

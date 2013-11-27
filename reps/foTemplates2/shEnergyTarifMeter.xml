@@ -1,115 +1,250 @@
 <?xml version = '1.0' encoding = 'utf-8'?>
 <xsl:stylesheet version="2.0"
-				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-				xmlns:fo="http://www.w3.org/1999/XSL/Format"
-				xmlns:xdofo="http://xmlns.oracle.com/oxp/fo/extensions">
-   <xsl:decimal-format name="energy" grouping-separator=' ' decimal-separator="."/> 
-   <xsl:template match="/">
-      <fo:root>
-         <xdofo:properties>
-            <xdofo:property name="default-tab-width">35.4pt</xdofo:property>
-         </xdofo:properties>
-         <fo:layout-master-set>
-            <fo:simple-page-master master-name="master0" margin-left="51.3pt" margin-right="22.95pt" page-height="841.9pt" page-width="595.3pt" margin-top="28.35pt" margin-bottom="35.45pt">
-               <fo:region-before region-name="region-header" extent="0.0pt"/>
-               <fo:region-body region-name="region-body" margin-top="0.0pt" margin-bottom="21.25pt"/>
-               <fo:region-after region-name="region-footer" extent="21.25pt" display-align="after"/>
-            </fo:simple-page-master>
-         </fo:layout-master-set>
-         <fo:page-sequence master-reference="master0">
-            <fo:static-content flow-name="region-header"/>
-            <fo:static-content flow-name="region-footer"/>
-            <fo:flow flow-name="region-body">
-               <fo:block xdofo:line-spacing="multiple:13.8pt" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="5.4pt" text-align="center" padding-bottom="10.0pt" end-indent="5.4pt" padding-top="0.0pt" height="0.0pt">
-                  <fo:inline xml:space="preserve" white-space-collapse="false" style-name="Normal" height="0.0pt" font-family-generic="modern" font-family="Courier New" font-size="14.0pt" style-id="s0" font-style="italic" font-weight="bold">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:xdofo="http://xmlns.oracle.com/oxp/fo/extensions">
+	<xsl:decimal-format name="energy"
+		grouping-separator=' ' decimal-separator="." />
+	<xsl:template match="/">
+		<fo:root>
+			<xdofo:properties>
+				<xdofo:property name="default-tab-width">35.4pt</xdofo:property>
+			</xdofo:properties>
+			<fo:layout-master-set>
+				<fo:simple-page-master master-name="master0"
+					margin-left="51.3pt" margin-right="22.95pt" page-height="841.9pt"
+					page-width="595.3pt" margin-top="28.35pt" margin-bottom="35.45pt">
+					<fo:region-before region-name="region-header"
+						extent="0.0pt" />
+					<fo:region-body region-name="region-body"
+						margin-top="0.0pt" margin-bottom="21.25pt" />
+					<fo:region-after region-name="region-footer"
+						extent="21.25pt" display-align="after" />
+				</fo:simple-page-master>
+			</fo:layout-master-set>
+			<fo:page-sequence master-reference="master0">
+				<fo:static-content flow-name="region-header" />
+				<fo:static-content flow-name="region-footer" />
+				<fo:flow flow-name="region-body">
+					<fo:block xdofo:line-spacing="multiple:13.8pt" orphans="2"
+						widows="2" linefeed-treatment="preserve" start-indent="5.4pt"
+						text-align="center" padding-bottom="10.0pt" end-indent="5.4pt"
+						padding-top="0.0pt" height="0.0pt">
+						<fo:inline xml:space="preserve" white-space-collapse="false"
+							style-name="Normal" height="0.0pt" font-family-generic="modern"
+							font-family="Courier New" font-size="14.0pt" style-id="s0"
+							font-style="italic" font-weight="bold">
 Споживання електроенергії по дифтарифах
-з <xsl:value-of select="(.//P_DTBEG)"/> р. по <xsl:value-of select="(.//P_DTEND)"/> р.
-по об’єкту <xsl:value-of select="(.//Capt)[1]"/></fo:inline>
-               </fo:block>
-               <fo:block xdofo:line-spacing="multiple:13.8pt" orphans="2" widows="2" linefeed-treatment="preserve" text-align="center" padding-bottom="0.5pt" end-indent="5.4pt" padding-top="0.5pt">
-                  <fo:table start-indent="0.0pt" style-id="ts15" style-name="Table Grid" xdofo:align="center" width="" xdofo:table-summary="Template Table 1" xdofo:row-header-count="0">
-                     <fo:table-column column-width="150pt"/>
-                     <fo:table-column column-width="60pt"/>
-                     <fo:table-column column-width="80pt"/>
-                     <fo:table-column column-width="80pt"/>
-                     <fo:table-column column-width="80pt"/>
-                     <fo:table-body>
-                        <fo:table-row>
-                           <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                              <fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
-                                 <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
-Канал</fo:inline>
-                              </fo:block>
-                           </fo:table-cell>
-                           <fo:table-cell padding-start="4.9pt" vertical-align="top" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                              <fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
-                                 <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
-Зона</fo:inline>
-                              </fo:block>
-                           </fo:table-cell>
-                           <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                              <fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
-                                 <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
-Початкові</fo:inline>
-                              </fo:block>
-                           </fo:table-cell>
-                           <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                              <fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
-                                 <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
-Кінцеві</fo:inline>
-                              </fo:block>
-                           </fo:table-cell>
-                           <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                              <fo:block orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt">
-                                 <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt" font-weight="bold">
-Споживання</fo:inline>
-                              </fo:block>
-                           </fo:table-cell>
-                        </fo:table-row>
-                        <xsl:for-each select="/DATA/LIST_ROW/ROW" xdofo:ctx="3">
-                           <fo:table-row xdofo:repeat="R">
-                              <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                                 <fo:block xdofo:xliff-note="for, Kanal" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="left" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0pt">
-                                    <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
-                                       <xsl:value-of select="(.//KANAL)[1]"/>
-                                    </fo:inline>
-                                 </fo:block>
-                              </fo:table-cell>
-                              <fo:table-cell padding-start="4.9pt" vertical-align="top" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                                 <fo:block xdofo:xliff-note="Zona" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="center" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0.0pt">
-                                    <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
-                                       <xsl:value-of select="(.//ZONA)[1]"/>
-                                    </fo:inline>
-                                 </fo:block>
-                              </fo:table-cell>
-                              <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                                 <fo:block xdofo:xliff-note="BegVal" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="right" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0.0pt">
-                                    <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
-                                       <xsl:value-of select="format-number((.//BEGVAL)[1], '### ### ### ##0.000','energy')"/>
-                                    </fo:inline>
-                                 </fo:block>
-                              </fo:table-cell>
-                              <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                                 <fo:block xdofo:xliff-note="EndVal" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="right" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0.0pt">
-                                    <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
-                                       <xsl:value-of select="format-number((.//ENDVAL)[1], '### ### ### ##0.000','energy')"/>
-                                    </fo:inline>
-                                 </fo:block>
-                              </fo:table-cell>
-                              <fo:table-cell padding-start="4.9pt" vertical-align="middle" border-bottom="1.0pt solid #00b050" border-end-color="#00b050" padding-top="0.0pt" border-end-style="solid" border-start-color="#00b050" padding-end="4.9pt" number-columns-spanned="1" border-top="1.0pt solid #00b050" border-start-style="solid" height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt" border-start-width="1.0pt">
-                                 <fo:block xdofo:xliff-note="Spozh, end" orphans="2" widows="2" linefeed-treatment="preserve" start-indent="0.0pt" text-align="right" padding-bottom="0.0pt" end-indent="0.0pt" padding-top="0.0pt" height="0pt">
-                                    <fo:inline white-space-collapse="false" style-name="Normal" height="11.0pt" font-family-generic="modern" font-family="Courier New" font-size="11.0pt">
-                                       <xsl:value-of select="format-number((.//ENDVAL)[1] + (-1) * (.//BEGVAL)[1], '### ### ### ##0.000','energy')"/>
-                                    </fo:inline>
-                                 </fo:block>
-                              </fo:table-cell>
-                           </fo:table-row>
-                        </xsl:for-each>
-                     </fo:table-body>
-                  </fo:table>
-               </fo:block>
-            </fo:flow>
-         </fo:page-sequence>
-      </fo:root>
-   </xsl:template>
+з <xsl:value-of select="(.//P_DTBEG)" /> р. по <xsl:value-of
+							select="(.//P_DTEND)" /> р.
+по об’єкту <xsl:value-of select="(.//Capt)[1]" /></fo:inline>
+					</fo:block>
+					<fo:block xdofo:line-spacing="multiple:13.8pt" orphans="2"
+						widows="2" linefeed-treatment="preserve" text-align="center"
+						padding-bottom="0.5pt" end-indent="5.4pt" padding-top="0.5pt">
+						<fo:table start-indent="0.0pt" style-id="ts15"
+							style-name="Table Grid" xdofo:align="center" width=""
+							xdofo:table-summary="Template Table 1" xdofo:row-header-count="0">
+							<fo:table-column column-width="150pt" />
+							<fo:table-column column-width="60pt" />
+							<fo:table-column column-width="80pt" />
+							<fo:table-column column-width="80pt" />
+							<fo:table-column column-width="80pt" />
+							<fo:table-body>
+								<fo:table-row>
+									<fo:table-cell padding-start="4.9pt"
+										vertical-align="middle" border-bottom="1.0pt solid #00b050"
+										border-end-color="#00b050" padding-top="0.0pt"
+										border-end-style="solid" border-start-color="#00b050"
+										padding-end="4.9pt" number-columns-spanned="1"
+										border-top="1.0pt solid #00b050" border-start-style="solid"
+										height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+										border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve"
+											start-indent="0.0pt" text-align="center" padding-bottom="0.0pt"
+											end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal"
+												height="11.0pt" font-family-generic="modern" font-family="Courier New"
+												font-size="11.0pt" font-weight="bold">
+												Канал</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell padding-start="4.9pt"
+										vertical-align="top" border-bottom="1.0pt solid #00b050"
+										border-end-color="#00b050" padding-top="0.0pt"
+										border-end-style="solid" border-start-color="#00b050"
+										padding-end="4.9pt" number-columns-spanned="1"
+										border-top="1.0pt solid #00b050" border-start-style="solid"
+										height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+										border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve"
+											start-indent="0.0pt" text-align="center" padding-bottom="0.0pt"
+											end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal"
+												height="11.0pt" font-family-generic="modern" font-family="Courier New"
+												font-size="11.0pt" font-weight="bold">
+												Зона</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell padding-start="4.9pt"
+										vertical-align="middle" border-bottom="1.0pt solid #00b050"
+										border-end-color="#00b050" padding-top="0.0pt"
+										border-end-style="solid" border-start-color="#00b050"
+										padding-end="4.9pt" number-columns-spanned="1"
+										border-top="1.0pt solid #00b050" border-start-style="solid"
+										height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+										border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve"
+											start-indent="0.0pt" text-align="center" padding-bottom="0.0pt"
+											end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal"
+												height="11.0pt" font-family-generic="modern" font-family="Courier New"
+												font-size="11.0pt" font-weight="bold">
+												Початкові</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell padding-start="4.9pt"
+										vertical-align="middle" border-bottom="1.0pt solid #00b050"
+										border-end-color="#00b050" padding-top="0.0pt"
+										border-end-style="solid" border-start-color="#00b050"
+										padding-end="4.9pt" number-columns-spanned="1"
+										border-top="1.0pt solid #00b050" border-start-style="solid"
+										height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+										border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve"
+											start-indent="0.0pt" text-align="center" padding-bottom="0.0pt"
+											end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal"
+												height="11.0pt" font-family-generic="modern" font-family="Courier New"
+												font-size="11.0pt" font-weight="bold">
+												Кінцеві</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell padding-start="4.9pt"
+										vertical-align="middle" border-bottom="1.0pt solid #00b050"
+										border-end-color="#00b050" padding-top="0.0pt"
+										border-end-style="solid" border-start-color="#00b050"
+										padding-end="4.9pt" number-columns-spanned="1"
+										border-top="1.0pt solid #00b050" border-start-style="solid"
+										height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+										border-start-width="1.0pt">
+										<fo:block orphans="2" widows="2" linefeed-treatment="preserve"
+											start-indent="0.0pt" text-align="center" padding-bottom="0.0pt"
+											end-indent="0.0pt" padding-top="0.0pt">
+											<fo:inline white-space-collapse="false" style-name="Normal"
+												height="11.0pt" font-family-generic="modern" font-family="Courier New"
+												font-size="11.0pt" font-weight="bold">
+												Споживання</fo:inline>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								<xsl:for-each select="/DATA/LIST_ROW/ROW"
+									xdofo:ctx="3">
+									<fo:table-row xdofo:repeat="R">
+										<fo:table-cell padding-start="4.9pt"
+											vertical-align="middle" border-bottom="1.0pt solid #00b050"
+											border-end-color="#00b050" padding-top="0.0pt"
+											border-end-style="solid" border-start-color="#00b050"
+											padding-end="4.9pt" number-columns-spanned="1"
+											border-top="1.0pt solid #00b050" border-start-style="solid"
+											height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+											border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="for, Kanal" orphans="2"
+												widows="2" linefeed-treatment="preserve" start-indent="0.0pt"
+												text-align="left" padding-bottom="0.0pt" end-indent="0.0pt"
+												padding-top="0.0pt" height="0pt">
+												<fo:inline white-space-collapse="false"
+													style-name="Normal" height="11.0pt" font-family-generic="modern"
+													font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of select="(.//KANAL)[1]" />
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+										<fo:table-cell padding-start="4.9pt"
+											vertical-align="top" border-bottom="1.0pt solid #00b050"
+											border-end-color="#00b050" padding-top="0.0pt"
+											border-end-style="solid" border-start-color="#00b050"
+											padding-end="4.9pt" number-columns-spanned="1"
+											border-top="1.0pt solid #00b050" border-start-style="solid"
+											height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+											border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="Zona" orphans="2"
+												widows="2" linefeed-treatment="preserve" start-indent="0.0pt"
+												text-align="center" padding-bottom="0.0pt" end-indent="0.0pt"
+												padding-top="0.0pt" height="0.0pt">
+												<fo:inline white-space-collapse="false"
+													style-name="Normal" height="11.0pt" font-family-generic="modern"
+													font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of select="(.//ZONA)[1]" />
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+										<fo:table-cell padding-start="4.9pt"
+											vertical-align="middle" border-bottom="1.0pt solid #00b050"
+											border-end-color="#00b050" padding-top="0.0pt"
+											border-end-style="solid" border-start-color="#00b050"
+											padding-end="4.9pt" number-columns-spanned="1"
+											border-top="1.0pt solid #00b050" border-start-style="solid"
+											height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+											border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="BegVal" orphans="2"
+												widows="2" linefeed-treatment="preserve" start-indent="0.0pt"
+												text-align="right" padding-bottom="0.0pt" end-indent="0.0pt"
+												padding-top="0.0pt" height="0.0pt">
+												<fo:inline white-space-collapse="false"
+													style-name="Normal" height="11.0pt" font-family-generic="modern"
+													font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of
+														select="format-number((.//BEGVAL)[1], '### ### ### ##0.000','energy')" />
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+										<fo:table-cell padding-start="4.9pt"
+											vertical-align="middle" border-bottom="1.0pt solid #00b050"
+											border-end-color="#00b050" padding-top="0.0pt"
+											border-end-style="solid" border-start-color="#00b050"
+											padding-end="4.9pt" number-columns-spanned="1"
+											border-top="1.0pt solid #00b050" border-start-style="solid"
+											height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+											border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="EndVal" orphans="2"
+												widows="2" linefeed-treatment="preserve" start-indent="0.0pt"
+												text-align="right" padding-bottom="0.0pt" end-indent="0.0pt"
+												padding-top="0.0pt" height="0.0pt">
+												<fo:inline white-space-collapse="false"
+													style-name="Normal" height="11.0pt" font-family-generic="modern"
+													font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of
+														select="format-number((.//ENDVAL)[1], '### ### ### ##0.000','energy')" />
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+										<fo:table-cell padding-start="4.9pt"
+											vertical-align="middle" border-bottom="1.0pt solid #00b050"
+											border-end-color="#00b050" padding-top="0.0pt"
+											border-end-style="solid" border-start-color="#00b050"
+											padding-end="4.9pt" number-columns-spanned="1"
+											border-top="1.0pt solid #00b050" border-start-style="solid"
+											height="0.0pt" border-end-width="1.0pt" padding-bottom="0.0pt"
+											border-start-width="1.0pt">
+											<fo:block xdofo:xliff-note="Spozh, end" orphans="2"
+												widows="2" linefeed-treatment="preserve" start-indent="0.0pt"
+												text-align="right" padding-bottom="0.0pt" end-indent="0.0pt"
+												padding-top="0.0pt" height="0pt">
+												<fo:inline white-space-collapse="false"
+													style-name="Normal" height="11.0pt" font-family-generic="modern"
+													font-family="Courier New" font-size="11.0pt">
+													<xsl:value-of
+														select="format-number((.//ENDVAL)[1] + (-1) * (.//BEGVAL)[1], '### ### ### ##0.000','energy')" />
+												</fo:inline>
+											</fo:block>
+										</fo:table-cell>
+									</fo:table-row>
+								</xsl:for-each>
+							</fo:table-body>
+						</fo:table>
+					</fo:block>
+				</fo:flow>
+			</fo:page-sequence>
+		</fo:root>
+	</xsl:template>
 </xsl:stylesheet>

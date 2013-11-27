@@ -2,6 +2,8 @@ package ua.pr.reports;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import ua.pr.common.StringCrypter;
 import ua.pr.common.ToolsPrLib;
 import ua.pr.model.ModelDB;
+import ua.pr.model.orm.PgdiFileStorage;
+import ua.pr.model.orm.UserSetting;
 import ua.pr.reports.ui.MainFrame;
 import ua.pr.reports.ui.TreePanel;
 import ua.pr.reports.xml.EntityFromXML;
@@ -47,6 +51,9 @@ public class Main {
 		}
 //		--------------------------------------------------------------------------
 		ModelDB mdb = new ModelDB(login);
+//		--------------------------------------------------------------------------
+		
+//		--------------------------------------------------------------------------
 		MainFrame mainFrame = null;
 		String pathOfFormState = ToolsPrLib.getFullPath(base.getMainForm().getPathOfFormState());
 		File frmState = new File(pathOfFormState);

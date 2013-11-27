@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dataTemplate name="DATA">
 	<parameters>
-		<parameter name="p_idAccount" dataType="character"/>
-		<parameter name="p_dtBeg" dataType="character"/>
-		<parameter name="p_dtEnd" dataType="character"/>
-		<parameter name="p_typeEvent" dataType="character"/>
-		<parameter name="p_capt" dataType="character"/>
+		<parameter name="p_idAccount" dataType="character" />
+		<parameter name="p_dtBeg" dataType="character" />
+		<parameter name="p_dtEnd" dataType="character" />
+		<parameter name="p_typeEvent" dataType="character" />
+		<parameter name="p_capt" dataType="character" />
 	</parameters>
 	<dataQuery>
 		<sqlStatement name="qMeters">
@@ -22,9 +22,9 @@
 	</dataQuery>
 	<dataStructure>
 		<group name="ROW" source="qMeters">
-			<element name="DTEvent" value="DTEvent"/>
-			<element name="CaptEvent" value="CaptEvent"/>
-			<element name="ValEvent" value="ValEvent"/>
+			<element name="DTEvent" value="DTEvent" />
+			<element name="CaptEvent" value="CaptEvent" />
+			<element name="ValEvent" value="ValEvent" />
 		</group>
 	</dataStructure>
 </dataTemplate>

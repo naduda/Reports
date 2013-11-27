@@ -9,7 +9,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-@SuppressWarnings("restriction")
 public class EntityFromXML {
 	public Object getObject(String xmlFilePath, Class<?> xmlClass) {
 		Object result = null;

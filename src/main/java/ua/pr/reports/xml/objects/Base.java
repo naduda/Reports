@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlElement;
 
-@SuppressWarnings("restriction")
 @XmlRootElement(name="Base")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Base implements Serializable{

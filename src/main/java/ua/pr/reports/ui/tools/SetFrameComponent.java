@@ -2,7 +2,12 @@ package ua.pr.reports.ui.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -10,8 +15,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+
 import oracle.xdo.template.FOProcessor;
 import ua.pr.common.ToolsPrLib;
+import ua.pr.model.orm.PgdiFileStorage;
+import ua.pr.model.orm.UserSetting;
 import ua.pr.reports.common.CreateReport;
 import ua.pr.reports.common.ExportFile;
 import ua.pr.reports.common.Template;
@@ -33,17 +41,52 @@ public class SetFrameComponent implements Serializable {
 				setReports((JComponent) menu.getComponent(i), cReport);
 			}		
 		} else if (menu.getClass() == JMenu.class) {
+			String menuName = (String) menu.getClientProperty("uniqueID");
+			if (menuName.toLowerCase().indexOf("xlt") > 0) {
+				UserSetting user = mainFrame.getMdb().getUser(mainFrame.getBase().getLogin().getUser());
+				System.out.println("**************************************************");
+				for (PgdiFileStorage fs : user.getPgdiFileStorages()) {
+					if (fs.getExt().trim().toLowerCase().equals("xlt")) {
+						try {
+//							FileOutputStream fis = new FileOutputStream(new File("d:/" + fs.getDesc()+ ".xlt"));
+//							fis.write(fs.getBinary());
+//							fis.close();
+							
+							JMenuItem mItem = new JMenuItem(fs.getDesc());
+							mItem.putClientProperty("file", fs.getBinary());
+							mItem.addActionListener(new ActionListenerXLT());
+							menu.add(mItem);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				System.out.println("**************************************************");
+			}
 			for (int i = 0; i < ((JMenu)menu).getItemCount(); i++) {
 				JMenuItem item = ((JMenu)menu).getItem(i);
+				Template template = null;
 				if (item.getClass() == JMenuItem.class) {
-					Template template = new Template();
-					
-					template.setDataTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("dataTemplate")));
-					template.setId((String) item.getClientProperty("uniqueID"));
-					template.setName((String) item.getClientProperty("name"));
-					template.setParams((String) item.getClientProperty("params"));
-					template.setQuery((String) item.getClientProperty("query"));
-					template.setRtfTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("rtfTemplate")));
+					String dataTemplate = (String) item.getClientProperty("dataTemplate");
+					if(dataTemplate != null) {
+						template = new Template();
+						
+						template.setDataTemplate(ToolsPrLib.getFullPath(dataTemplate));
+						template.setId((String) item.getClientProperty("uniqueID"));
+						template.setName((String) item.getClientProperty("name"));
+						template.setParams((String) item.getClientProperty("params"));
+						template.setQuery((String) item.getClientProperty("query"));
+						template.setRtfTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("rtfTemplate")));
+						
+						String def = (String) item.getClientProperty("default");
+						if ((def != null) && (def.toString().toLowerCase().equals("true"))) {
+							
+							mainFrame.getCreateReport().setTemplate(template);
+							mainFrame.getLbActiveReport().setText(template.getName());
+						}
+						
+						item.addActionListener(new ActionListenerJMenuItem(template, mainFrame.getLbActiveReport(), cReport));
+					}
 					
 					String uniqueID = (String) item.getClientProperty("uniqueID");
 					if (uniqueID.indexOf("Export") >= 0) {
@@ -60,16 +103,7 @@ public class SetFrameComponent implements Serializable {
 						}
 						
 						item.addActionListener(new ActionListenerJMenuItem(fopFormat, cReport));
-					} else {
-						item.addActionListener(new ActionListenerJMenuItem(template, mainFrame.getLbActiveReport(), cReport));
-					}
-
-					String def = (String) item.getClientProperty("default");
-					if ((def != null) && (def.toString().toLowerCase().equals("true"))) {
-						
-						mainFrame.getCreateReport().setTemplate(template);
-						mainFrame.getLbActiveReport().setText(template.getName());
-					}
+					}		
 				} else if (item.getClass() == JMenu.class) {
 					setReports((JMenu)item, cReport);
 				}
@@ -130,5 +164,14 @@ public class SetFrameComponent implements Serializable {
 		public void setExport(boolean export) {
 			this.export = export;
 		}
+	}
+	
+	class ActionListenerXLT implements ActionListener, Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("XLT clicked");
+		}
+	
 	}
 }

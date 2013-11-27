@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dataTemplate name="DATA">
 	<parameters>
-		<parameter name="p_idNode" dataType="character"/>
-		<parameter name="p_idMeter" dataType="character"/>
-		<parameter name="p_dtBeg" dataType="character"/>
-		<parameter name="p_dtEnd" dataType="character"/>
+		<parameter name="p_idNode" dataType="character" />
+		<parameter name="p_idMeter" dataType="character" />
+		<parameter name="p_dtBeg" dataType="character" />
+		<parameter name="p_dtEnd" dataType="character" />
 	</parameters>
 	<dataQuery>
 		<sqlStatement name="qMeters">
@@ -17,10 +17,10 @@
 	</dataQuery>
 	<dataStructure>
 		<group name="ROW" source="qMeters">
-			<element name="Kanal" value="Kanal"/>
-			<element name="Zona" value="Zona"/>
-			<element name="BegVal" value="BegVal"/>
-			<element name="EndVal" value="EndVal"/>
+			<element name="Kanal" value="Kanal" />
+			<element name="Zona" value="Zona" />
+			<element name="BegVal" value="BegVal" />
+			<element name="EndVal" value="EndVal" />
 		</group>
 	</dataStructure>
 </dataTemplate>

@@ -54,8 +54,8 @@ public class Meter implements Serializable
 	private TypeMeter typeMeter;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumns({
-		@JoinColumn(name="IdConnect", referencedColumnName="IdConnect", insertable=false, updatable=false),
-		@JoinColumn(name="IdNode", referencedColumnName="IdNode", insertable=false, updatable=false)
+		@JoinColumn(name="IdConnect", insertable=false, updatable=false),
+		@JoinColumn(name="IdNode", insertable=false, updatable=false)
 		})
 	private LstConnection lstConnection;
 
