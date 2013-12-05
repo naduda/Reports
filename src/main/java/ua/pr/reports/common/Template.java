@@ -2,6 +2,10 @@ package ua.pr.reports.common;
 
 import java.io.Serializable;
 
+import javax.swing.JMenuItem;
+
+import ua.pr.common.ToolsPrLib;
+
 public class Template implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -11,6 +15,19 @@ public class Template implements Serializable {
 	private String dataTemplate;
 	private String query;
 	private String params;
+	
+	public Template() {
+		
+	}
+	
+	public Template(JMenuItem item) {
+		setDataTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("dataTemplate")));
+		setId((String) item.getClientProperty("uniqueID"));
+		setName((String) item.getClientProperty("name"));
+		setParams((String) item.getClientProperty("params"));
+		setQuery((String) item.getClientProperty("query"));
+		setRtfTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("rtfTemplate")));
+	}
 	
 	public String getId() {
 		return id;

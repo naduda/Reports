@@ -47,6 +47,15 @@
 			<systemPath>d:/GIT/prLibs.jar</systemPath>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>ua.pr</groupId>
+			<artifactId>prPOI</artifactId>
+			<version>2013</version>
+			<scope>system</scope>
+			<systemPath>d:/GIT/prPOI.jar</systemPath>
+			<optional>true</optional>
+		</dependency>
 
 		<dependency>
 			<groupId>ua.pr.xslt</groupId>
@@ -127,6 +136,26 @@
 			<scope>system</scope>
 			<systemPath>d:/Downloads/Dropbox/JAVA/libs/xmlp/xdo-server.jar</systemPath>
 			<optional>true</optional>
+		</dependency>
+		
+		
+		
+		<dependency>
+	  		<groupId>org.apache.poi</groupId>
+	  		<artifactId>poi</artifactId>
+	  		<version>3.9</version>
+	  	</dependency>
+	  	
+	  	<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
 		</dependency>
 	</dependencies>
 </project>

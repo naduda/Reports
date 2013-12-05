@@ -2,10 +2,8 @@ package ua.pr.reports.ui.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 
 import javax.swing.JComponent;
@@ -17,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import oracle.xdo.template.FOProcessor;
-import ua.pr.common.ToolsPrLib;
 import ua.pr.model.orm.PgdiFileStorage;
 import ua.pr.model.orm.UserSetting;
+import ua.pr.poi.XLT2XLS;
 import ua.pr.reports.common.CreateReport;
 import ua.pr.reports.common.ExportFile;
 import ua.pr.reports.common.Template;
@@ -41,45 +39,20 @@ public class SetFrameComponent implements Serializable {
 				setReports((JComponent) menu.getComponent(i), cReport);
 			}		
 		} else if (menu.getClass() == JMenu.class) {
-			String menuName = (String) menu.getClientProperty("uniqueID");
-			if (menuName.toLowerCase().indexOf("xlt") > 0) {
-				UserSetting user = mainFrame.getMdb().getUser(mainFrame.getBase().getLogin().getUser());
-				System.out.println("**************************************************");
-				for (PgdiFileStorage fs : user.getPgdiFileStorages()) {
-					if (fs.getExt().trim().toLowerCase().equals("xlt")) {
-						try {
-//							FileOutputStream fis = new FileOutputStream(new File("d:/" + fs.getDesc()+ ".xlt"));
-//							fis.write(fs.getBinary());
-//							fis.close();
-							
-							JMenuItem mItem = new JMenuItem(fs.getDesc());
-							mItem.putClientProperty("file", fs.getBinary());
-							mItem.addActionListener(new ActionListenerXLT());
-							menu.add(mItem);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				System.out.println("**************************************************");
-			}
+			String uniqueID = (String) menu.getClientProperty("uniqueID");
+
 			for (int i = 0; i < ((JMenu)menu).getItemCount(); i++) {
 				JMenuItem item = ((JMenu)menu).getItem(i);
+				uniqueID = (String) item.getClientProperty("uniqueID");
+				
 				Template template = null;
 				if (item.getClass() == JMenuItem.class) {
 					String dataTemplate = (String) item.getClientProperty("dataTemplate");
 					if(dataTemplate != null) {
-						template = new Template();
+						template = new Template(item);
 						
-						template.setDataTemplate(ToolsPrLib.getFullPath(dataTemplate));
-						template.setId((String) item.getClientProperty("uniqueID"));
-						template.setName((String) item.getClientProperty("name"));
-						template.setParams((String) item.getClientProperty("params"));
-						template.setQuery((String) item.getClientProperty("query"));
-						template.setRtfTemplate(ToolsPrLib.getFullPath((String) item.getClientProperty("rtfTemplate")));
-						
-						String def = (String) item.getClientProperty("default");
-						if ((def != null) && (def.toString().toLowerCase().equals("true"))) {
+						String default_ = (String) item.getClientProperty("default");
+						if ((default_ != null) && (default_.toString().toLowerCase().equals("true"))) {
 							
 							mainFrame.getCreateReport().setTemplate(template);
 							mainFrame.getLbActiveReport().setText(template.getName());
@@ -87,8 +60,10 @@ public class SetFrameComponent implements Serializable {
 						
 						item.addActionListener(new ActionListenerJMenuItem(template, mainFrame.getLbActiveReport(), cReport));
 					}
-					
-					String uniqueID = (String) item.getClientProperty("uniqueID");
+
+					if (uniqueID == null) {
+						System.out.println(item);
+					}
 					if (uniqueID.indexOf("Export") >= 0) {
 						String format = (String) item.getClientProperty("format");
 						Byte fopFormat = 0;
@@ -106,6 +81,25 @@ public class SetFrameComponent implements Serializable {
 					}		
 				} else if (item.getClass() == JMenu.class) {
 					setReports((JMenu)item, cReport);
+				}
+			}
+			if (uniqueID.toLowerCase().indexOf("xlt") > 0) {
+				UserSetting user = mainFrame.getMdb().getUser(mainFrame.getBase().getLogin().getUser());
+				for (PgdiFileStorage fs : user.getPgdiFileStorages()) {
+					if (fs.getExt().trim().toLowerCase().equals("xlt")) {
+						try {
+//							FileOutputStream fis = new FileOutputStream(new File("d:/" + fs.getDesc()+ ".xlt"));
+//							fis.write(fs.getBinary());
+//							fis.close();
+							
+							JMenuItem mItem = new JMenuItem(fs.getDesc());
+							mItem.putClientProperty("file", fs.getBinary());
+							mItem.addActionListener(new ActionListenerXLT(cReport, fs));
+							menu.add(mItem);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
@@ -169,7 +163,20 @@ public class SetFrameComponent implements Serializable {
 	class ActionListenerXLT implements ActionListener, Serializable {
 		private static final long serialVersionUID = 1L;
 
+		private CreateReport cRep;
+		private PgdiFileStorage fs;
+		
+		public ActionListenerXLT(CreateReport cRep, PgdiFileStorage fs) {
+			this.cRep = cRep;
+			this.fs = fs;
+		}
+		
 		public void actionPerformed(ActionEvent e) {
+			InputStream is = new ByteArrayInputStream(fs.getBinary());
+
+			XLT2XLS xlt = new XLT2XLS(is, "D:/Result.xls", cRep.getDtBeg().getDate(), cRep.getDtEnd().getDate(), 
+					cRep.getMainFrame().getMdb().getConn());
+			xlt.create();
 			System.out.println("XLT clicked");
 		}
 	
